@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:paper_trade/models/market_details.dart';
 import 'package:paper_trade/screens/login.dart';
 import 'package:paper_trade/shared/constants.dart';
 // Import the firebase_core plugin
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:paper_trade/shared/getMarketData.dart';
-
-final marketDataProvider =
-    StreamProvider<MarketDetails>((ref) => getMarketDataApp().asStream());
-
-// 1
-final firebaseAuthProvider =
-    Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
-
-// 2
-final authStateChangesProvider = StreamProvider<User>(
-    (ref) => ref.watch(firebaseAuthProvider).authStateChanges());
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

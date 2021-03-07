@@ -4,12 +4,10 @@ import 'package:paper_trade/models/market_details.dart';
 import 'package:paper_trade/shared/http.dart';
 import 'package:paper_trade/shared/marketStatus.dart';
 
-Future<MarketDetails> getMarketDataApp() async {
+Stream<MarketDetails> getMarketDataApp() async* {
   int _counter = 0;
   // initilize
-  MarketDetails _marketDetails = MarketDetails();
-  // get initial data
-  _marketDetails = await getMarketData();
+  MarketDetails _marketDetails = await getMarketData();
 
   // run the job on configured time
   Timer.periodic(Duration(seconds: 2), (Timer t) async {
@@ -29,5 +27,5 @@ Future<MarketDetails> getMarketDataApp() async {
   // _marketStream.add(_marketDetails);
   _counter++;
 
-  return _marketDetails;
+  yield _marketDetails;
 }

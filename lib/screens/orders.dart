@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:paper_trade/main.dart';
 import 'package:paper_trade/models/market_data.dart';
 import 'package:paper_trade/models/market_details.dart';
+import 'package:paper_trade/providers/provider.dart';
 import 'package:paper_trade/screens/buysell.dart';
 import 'package:paper_trade/screens/login.dart';
 import 'package:paper_trade/shared/firebase.dart';
@@ -22,8 +22,8 @@ class OrdersScreen extends ConsumerWidget {
     final AsyncValue<MarketDetails> userProvider = watch(marketDataProvider);
 
     double getCurrentPrice(String symbol) {
-      if (userProvider?.data?.value?.marketData?.length > 0) {
-        double lPrice = userProvider?.data?.value?.marketData
+      if (userProvider?.data?.value?.marketData != null) {
+        double lPrice = userProvider.data.value.marketData
             .firstWhere((q) => q.symbol == symbol)
             .lastPrice;
 
@@ -34,8 +34,8 @@ class OrdersScreen extends ConsumerWidget {
     }
 
     double calculateProfitLoss(String symbol, int qty, double buyPrice) {
-      if (userProvider?.data?.value?.marketData?.length > 0) {
-        double lPrice = userProvider?.data?.value?.marketData
+      if (userProvider?.data?.value?.marketData != null) {
+        double lPrice = userProvider.data.value.marketData
             .firstWhere((q) => q.symbol == symbol)
             .lastPrice;
 
@@ -46,8 +46,8 @@ class OrdersScreen extends ConsumerWidget {
     }
 
     double calculateProfitLossPercent(String symbol, double buyPrice) {
-      if (userProvider?.data?.value?.marketData?.length > 0) {
-        double lPrice = userProvider?.data?.value?.marketData
+      if (userProvider?.data?.value?.marketData != null) {
+        double lPrice = userProvider.data.value.marketData
             .firstWhere((q) => q.symbol == symbol)
             .lastPrice;
 

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:paper_trade/main.dart';
+import 'package:paper_trade/providers/provider.dart';
 import 'package:paper_trade/screens/login.dart';
 import 'package:paper_trade/shared/firebase.dart';
 import 'package:paper_trade/widgets/bottom_navigation_bar.dart';

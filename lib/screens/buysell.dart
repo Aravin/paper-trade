@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:paper_trade/main.dart';
 import 'package:paper_trade/models/market_data.dart';
+import 'package:paper_trade/providers/provider.dart';
 import 'package:paper_trade/screens/orders.dart';
 import 'package:paper_trade/shared/constants.dart';
 import 'package:paper_trade/shared/firebase.dart';

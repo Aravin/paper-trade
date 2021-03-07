@@ -2,166 +2,120 @@ import 'dart:async';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:paper_trade/models/market_data.dart';
 import 'package:paper_trade/models/market_details.dart';
+import 'package:paper_trade/providers/provider.dart';
 import 'package:paper_trade/screens/buysell.dart';
 import 'package:paper_trade/shared/constants.dart';
-import 'package:paper_trade/shared/http.dart';
-import 'package:paper_trade/shared/marketStatus.dart';
 import 'package:paper_trade/widgets/bottom_navigation_bar.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
+  Widget build(BuildContext context, ScopedReader watch) {
+    Stream<MarketDetails> _marketStream = watch(marketDataProvider.stream);
 
-class _HomeScreenState extends State<HomeScreen> {
-  final searchController = TextEditingController();
-  StreamController<MarketDetails> _marketStream =
-      StreamController<MarketDetails>();
-  int _counter = 0;
-  String _sortBy = 'sortAZ';
-  String _searchStr = '';
+    final searchController = TextEditingController();
+    String _sortBy = 'sortAZ';
+    String _searchStr = '';
 
-  void getMarketDataInternal() async {
-    // initilize
-    MarketDetails _marketDetails = MarketDetails();
-    // get initial data
-    _marketDetails = await getMarketData();
+    // MarketData _nifty50 =  _marketStream.toList();
 
-    // run the job on configured time
-    Timer.periodic(Duration(seconds: 2), (Timer t) async {
-      if (isMarketOpen()) {
-        MarketDetails _marketDataTemp = await getMarketData();
+    // // sort by
+    // switch (_sortBy) {
+    //   case 'sortAZ':
+    //     _nifty50 = _marketDetails.marketData.elementAt(0);
+    //     _marketDetails.marketData
+    //         .sort((a, b) => (a.companyName).compareTo((b.companyName)));
+    //     _marketDetails.marketData.removeAt(0);
+    //     _marketDetails.marketData.insert(0, _nifty50);
+    //     break;
 
-        if (_counter > 0 &&
-            _marketDataTemp.marketData != null &&
-            _marketDataTemp.marketData.length > 0) {
-          _marketDetails = _marketDataTemp;
-        }
-      }
-    });
+    //   case 'sortZA':
+    //     _nifty50 = _marketDetails.marketData.elementAt(0);
+    //     _marketDetails.marketData
+    //         .sort((a, b) => (b.companyName).compareTo((a.companyName)));
+    //     _marketDetails.marketData.removeAt(0);
+    //     _marketDetails.marketData.insert(0, _nifty50);
+    //     break;
 
-    MarketData _nifty50;
-    // MarketData _nifty50 = _marketDetails.marketData.elementAt(0);
-    // _marketDetails.marketData.removeAt(0);
+    //   case 'sortPriceLow':
+    //     _nifty50 = _marketDetails.marketData.elementAt(0);
+    //     _marketDetails.marketData
+    //         .sort((a, b) => (a.lastPrice).compareTo((b.lastPrice)));
+    //     _marketDetails.marketData.removeAt(0);
+    //     _marketDetails.marketData.insert(0, _nifty50);
+    //     break;
 
-    // sort by
-    switch (_sortBy) {
-      case 'sortAZ':
-        _nifty50 = _marketDetails.marketData.elementAt(0);
-        _marketDetails.marketData
-            .sort((a, b) => (a.companyName).compareTo((b.companyName)));
-        _marketDetails.marketData.removeAt(0);
-        _marketDetails.marketData.insert(0, _nifty50);
-        break;
+    //   case 'sortPriceHigh':
+    //     _nifty50 = _marketDetails.marketData.elementAt(0);
+    //     _marketDetails.marketData
+    //         .sort((a, b) => (b.companyName).compareTo((a.companyName)));
+    //     _marketDetails.marketData.removeAt(0);
+    //     _marketDetails.marketData.insert(0, _nifty50);
+    //     break;
 
-      case 'sortZA':
-        _nifty50 = _marketDetails.marketData.elementAt(0);
-        _marketDetails.marketData
-            .sort((a, b) => (b.companyName).compareTo((a.companyName)));
-        _marketDetails.marketData.removeAt(0);
-        _marketDetails.marketData.insert(0, _nifty50);
-        break;
+    //   case 'sortPercentLow':
+    //     _nifty50 = _marketDetails.marketData.elementAt(0);
+    //     _marketDetails.marketData
+    //         .sort((a, b) => (a.pChange).compareTo((b.pChange)));
+    //     _marketDetails.marketData.removeAt(0);
+    //     _marketDetails.marketData.insert(0, _nifty50);
+    //     break;
 
-      case 'sortPriceLow':
-        _nifty50 = _marketDetails.marketData.elementAt(0);
-        _marketDetails.marketData
-            .sort((a, b) => (a.lastPrice).compareTo((b.lastPrice)));
-        _marketDetails.marketData.removeAt(0);
-        _marketDetails.marketData.insert(0, _nifty50);
-        break;
+    //   case 'sortPercentHigh':
+    //     // _marketDetails?.then((x) => {
+    //     _nifty50 = _marketDetails.marketData.elementAt(0);
+    //     _marketDetails.marketData
+    //         .sort((a, b) => (b.pChange).compareTo((a.pChange)));
+    //     _marketDetails.marketData.removeAt(0);
+    //     _marketDetails.marketData.insert(0, _nifty50);
+    //     // });
+    //     break;
+    // }
 
-      case 'sortPriceHigh':
-        _nifty50 = _marketDetails.marketData.elementAt(0);
-        _marketDetails.marketData
-            .sort((a, b) => (b.companyName).compareTo((a.companyName)));
-        _marketDetails.marketData.removeAt(0);
-        _marketDetails.marketData.insert(0, _nifty50);
-        break;
+    // // search
+    // if (_searchStr != null && _searchStr != '') {
+    //   print(_searchStr);
+    //   _nifty50 = _marketDetails.marketData.elementAt(0);
+    //   _marketDetails.marketData.filter((a) =>
+    //       a.companyName
+    //           .toString()
+    //           .toLowerCase()
+    //           .indexOf(_searchStr.toLowerCase()) !=
+    //       -1);
+    //   _marketDetails.marketData.removeAt(0);
+    //   _marketDetails.marketData.insert(0, _nifty50);
+    // }
 
-      case 'sortPercentLow':
-        _nifty50 = _marketDetails.marketData.elementAt(0);
-        _marketDetails.marketData
-            .sort((a, b) => (a.pChange).compareTo((b.pChange)));
-        _marketDetails.marketData.removeAt(0);
-        _marketDetails.marketData.insert(0, _nifty50);
-        break;
-
-      case 'sortPercentHigh':
-        // _marketDetails?.then((x) => {
-        _nifty50 = _marketDetails.marketData.elementAt(0);
-        _marketDetails.marketData
-            .sort((a, b) => (b.pChange).compareTo((a.pChange)));
-        _marketDetails.marketData.removeAt(0);
-        _marketDetails.marketData.insert(0, _nifty50);
-        // });
-        break;
+    Future<bool> _onWillPop() async {
+      return (await showDialog(
+            context: context,
+            builder: (context) => new AlertDialog(
+              title: Text('Are you sure?'),
+              content: Text('Do you want to exit an App'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('No'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Yes'),
+                ),
+              ],
+            ),
+          )) ??
+          false;
     }
 
-    // search
-    if (_searchStr != null && _searchStr != '') {
-      print(_searchStr);
-      _nifty50 = _marketDetails.marketData.elementAt(0);
-      _marketDetails.marketData.filter((a) =>
-          a.companyName
-              .toString()
-              .toLowerCase()
-              .indexOf(_searchStr.toLowerCase()) !=
-          -1);
-      _marketDetails.marketData.removeAt(0);
-      _marketDetails.marketData.insert(0, _nifty50);
-    }
-
-    // _marketDetails.marketData.insert(0, _nifty50);
-    // counter to check if its first time load
-    _marketStream.add(_marketDetails);
-    _counter++;
-  }
-
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text('Do you want to exit an App'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text('No'),
-              ),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
-        false;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getMarketDataInternal();
-  }
-
-  void dispose() {
-    // searchController.dispose();
-    _marketStream.close();
-    _marketStream = null;
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: WillPopScope(
           onWillPop: _onWillPop,
           child: StreamBuilder<MarketDetails>(
-            stream: _marketStream.stream,
+            stream: _marketStream,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
@@ -179,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ElevatedButton(
                         child: 'Reload'.text.make(),
                         onPressed: () {
-                          getMarketDataInternal();
+                          // getMarketDataInternal();
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.greenAccent,
@@ -273,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               // setState(() {
                               //   _searchStr = value;
                               // });
-                              getMarketDataInternal();
+                              // getMarketDataInternal();
                             },
                           ),
                         ),
@@ -287,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             <PopupMenuEntry<String>>[
                           PopupMenuItem<String>(
                             value: 'sortAZ',
-                            child: this._sortBy == 'sortAZ'
+                            child: _sortBy == 'sortAZ'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -302,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           PopupMenuItem<String>(
                             value: 'sortZA',
-                            child: this._sortBy == 'sortZA'
+                            child: _sortBy == 'sortZA'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -317,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           PopupMenuItem<String>(
                             value: 'sortPriceLow',
-                            child: this._sortBy == 'sortPriceLow'
+                            child: _sortBy == 'sortPriceLow'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -332,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           PopupMenuItem<String>(
                             value: 'sortPriceHigh',
-                            child: this._sortBy == 'sortPriceHigh'
+                            child: _sortBy == 'sortPriceHigh'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -347,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           PopupMenuItem<String>(
                             value: 'sortPercentLow',
-                            child: this._sortBy == 'sortPercentLow'
+                            child: _sortBy == 'sortPercentLow'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -362,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           PopupMenuItem<String>(
                             value: 'sortPercentHigh',
-                            child: this._sortBy == 'sortPercentHigh'
+                            child: _sortBy == 'sortPercentHigh'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
