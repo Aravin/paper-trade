@@ -176,11 +176,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       // CircularProgressIndicator(),
                       HeightBox(20),
                       'Failed to get data from NSE India...'.text.make(),
-                      RaisedButton(
+                      ElevatedButton(
                         child: 'Reload'.text.make(),
                         onPressed: () {
                           getMarketDataInternal();
                         },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.greenAccent,
+                        ),
                       ),
                     ],
                   ),
@@ -443,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    RaisedButton(
+                                    ElevatedButton(
                                       onPressed: () => {
                                         Navigator.push(
                                           context,
@@ -457,9 +460,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       },
                                       child: Text('BUY'),
-                                      color: Colors.greenAccent,
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.greenAccent,
+                                      ),
                                     ),
-                                    RaisedButton(
+                                    ElevatedButton(
                                       onPressed: () => {
                                         Navigator.push(
                                           context,
@@ -473,7 +478,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       },
                                       child: Text('SELL'),
-                                      color: Colors.deepOrangeAccent,
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.deepOrangeAccent,
+                                      ),
                                     ),
                                   ],
                                 ),

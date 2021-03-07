@@ -188,7 +188,7 @@ class OrdersScreen extends ConsumerWidget {
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: RaisedButton(
+                                                  child: ElevatedButton(
                                                     onPressed: () => {
                                                       Navigator.push(
                                                         context,
@@ -208,17 +208,24 @@ class OrdersScreen extends ConsumerWidget {
                                                       )
                                                     },
                                                     child: Text('MODIFY'),
-                                                    color: Colors.orangeAccent,
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary:
+                                                          Colors.orangeAccent,
+                                                    ),
                                                   ),
                                                 ),
                                                 SizedBox(width: 20),
                                                 Expanded(
-                                                  child: RaisedButton(
+                                                  child: ElevatedButton(
                                                     onPressed: () => {
                                                       cancelOrder(document.id),
                                                     },
                                                     child: Text('CANCEL'),
-                                                    color: Colors.redAccent,
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Colors.redAccent,
+                                                    ),
                                                   ),
                                                 ),
                                               ],

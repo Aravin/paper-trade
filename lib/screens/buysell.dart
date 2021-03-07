@@ -223,7 +223,7 @@ class BuySellScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: () => {
                             createOrder(
                               this.marketData.symbol,
@@ -244,9 +244,11 @@ class BuySellScreen extends ConsumerWidget {
                                 }),
                           },
                           child: Text('CONFIRM ORDER'),
-                          color: this.buyOrSell == 'sell'
-                              ? Colors.redAccent
-                              : Colors.greenAccent,
+                          style: ElevatedButton.styleFrom(
+                            primary: this.buyOrSell == 'sell'
+                                ? Colors.redAccent
+                                : Colors.greenAccent,
+                          ),
                         ),
                       ),
                     ],

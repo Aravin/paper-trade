@@ -94,14 +94,19 @@ class AccountsScreen extends ConsumerWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                RaisedButton(
-                                    onPressed: () => {},
-                                    child: Text('ADD FUND'),
-                                    color: Colors.greenAccent),
-                                RaisedButton(
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.greenAccent,
+                                  ),
+                                  onPressed: () => {},
+                                  child: Text('ADD FUND'),
+                                ),
+                                ElevatedButton(
                                   onPressed: () => {},
                                   child: Text('WITHDRAW FUND'),
-                                  color: Colors.deepOrangeAccent,
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepOrangeAccent,
+                                  ),
                                 ),
                               ],
                             ),
